@@ -1,12 +1,12 @@
-<!doctype html>
+<!doctype html> 
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <title>dog3</title>
+  <title>Dog Model</title>
 
-  <!-- Подключаем model-viewer -->
+  <!-- model-viewer -->
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.1/dist/es-module-shims.js"></script>
   <script type="importmap">
   {
@@ -42,11 +42,9 @@
       border: 1px solid #e0e0e0;
       display: flex;
       gap: 10px;
-      width: auto;
       max-width: 90vw;
       overflow-x: auto;
       white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
 
@@ -85,13 +83,6 @@
       width: 100vw;
       height: 100vh;
       background: #ffffff;
-      touch-action: pan-y pinch-zoom;
-    }
-
-    @media (max-width: 768px) {
-      model-viewer {
-        --progress-bar-height: 2px;
-      }
     }
   </style>
 </head>
@@ -99,8 +90,8 @@
 <body>
 
 <div id="controls">
-  <button id="btn1">🎬 Анимация 1</button>
-  <button id="btn2">🚶 Анимация 2</button>
+  <button id="btn1">🐶 Анимация 1</button>
+  <button id="btn2">🏃 Анимация 2</button>
   <button id="outlineBtn">✨ Контур</button>
   <button id="pixelBtn">🔳 Пикселизация</button>
 </div>
@@ -113,15 +104,14 @@
   animation-crossfade-duration="300"
   shadow-intensity="1"
   exposure="1"
-  style="background-color: #ffffff;"
-  camera-orbit="0deg 75deg 5m"
-  min-camera-orbit="auto auto 2m"
-  max-camera-orbit="auto auto 10m"
+  camera-orbit="0deg 75deg 3m"
+  min-camera-orbit="auto auto 1.5m"
+  max-camera-orbit="auto auto 6m"
   interaction-prompt="none"
 >
 
-  <effect-composer id="composer">
-    <outline-effect id="outlineEffect" color="red" blend-mode="skip"></outline-effect>
+  <effect-composer>
+    <outline-effect id="outlineEffect" color="orange" blend-mode="skip"></outline-effect>
     <pixelate-effect id="pixelEffect" granularity="15" blend-mode="skip"></pixelate-effect>
   </effect-composer>
 
@@ -129,8 +119,6 @@
 
 <script>
 (() => {
-  console.log('🚀 Script started');
-  
   const mv = document.getElementById('mv');
   const btn1 = document.getElementById('btn1');
   const btn2 = document.getElementById('btn2');
@@ -143,7 +131,40 @@
   let animations = [];
   let isOutlineActive = false;
   let isPixelActive = false;
-  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  console.log('Effects found:', { outlineEffect, pixelEffect });
-  console.log('Is mobile:', isMobile);
+  mv.addEventListener('load', () => {
+    animations = mv.availableAnimations;
+    console.log("Найденные анимации:", animations);
+  });
+
+  btn1.addEventListener('click', () => {
+    if (animations.length > 0) {
+      mv.animationName = animations[0];
+      mv.play();
+    }
+  });
+
+  btn2.addEventListener('click', () => {
+    if (animations.length > 1) {
+      mv.animationName = animations[1];
+      mv.play();
+    }
+  });
+
+  outlineBtn.addEventListener('click', () => {
+    isOutlineActive = !isOutlineActive;
+    outlineEffect.setAttribute("blend-mode", isOutlineActive ? "normal" : "skip");
+    outlineBtn.classList.toggle("active", isOutlineActive);
+  });
+
+  pixelBtn.addEventListener('click', () => {
+    isPixelActive = !isPixelActive;
+    pixelEffect.setAttribute("blend-mode", isPixelActive ? "normal" : "skip");
+    pixelBtn.classList.toggle("active", isPixelActive);
+  });
+
+})();
+</script>
+
+</body>
+</html>
